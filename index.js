@@ -104,7 +104,7 @@ function addEmployee() {
         name: "roleId",
         type: "rawlist",
         choices: results.map(item => item.title),
-        message: "Select a role for the employee"
+        message: "Select a role for the employee."
       }
     ]).then(function (answers) {
       const selectedRole = results.find(item => item.title === answers.roleId);
@@ -129,7 +129,7 @@ function addRole() {
         name: "title",
         type: "list",
         message: "What type of role are you adding?",
-        choices: "Manager, Assistant Manager, Team Leader, Engineer, Designer"
+        choices: ["Manager", "Assistant Manager", "Team Leader", "Engineer", "Designer"]
       },
       {
         name: "salary",
@@ -139,19 +139,41 @@ function addRole() {
       {
         name: "departmentId",
         type: "input",
-        message: "What is the department Id for this role?"
+        message: "What is the department ID for this role?"
       }
-    ]).then(function (answer) {
-      const selectedRole = results.find(item => item.title === departmentId);
+    ]).then(function (answers) {
       connection.query("INSERT INTO roles SET ?",
       {
         title: answers.title,
         salary: answers.salary,
-        department_id: departmentId
+        department_id: answers.departmentId
       }, function (err, res) {
         if (err) throw err;
         console.log("Added new " + answers.title + " " + "role." + "\n");
+        startApp();
       })
     })
   })
+};
+function addDepartment() {
+  connection.query("SELECT * FROM departments", function (err, results) {
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        name: "department",
+        type: "input",
+        message: "What is the name of the department you want to add?"
+      }
+    ]).then(function (answers) {
+      connection.query("INSERT INTO departments SET ?",
+      {
+        name: answers.department
+      }, function (err, res) {
+        if (err) throw err;
+        console.log("Added " + answers.department + " " + "to departments." + "\n");
+        startApp();
+      }
+      )
+    })
+})
 };
