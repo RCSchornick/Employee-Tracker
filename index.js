@@ -177,3 +177,39 @@ function addDepartment() {
     })
 })
 };
+function updateRole() {
+  connection.query("SELECT * FROM employees", function (err, results) {
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        type: "list",
+        name: "updateEmployee",
+        message: "Which employee do you want to update?",
+        choices: results.map(employee => employee.first_name)
+      }
+    ]).then(function (answers) {
+      const employee = answers.updateEmployee
+      connection.query("SELECT * FROM roles", function (err, results) {
+        if (err) throw err;
+        inquirer.prompt([
+          {
+            type: "list",
+            name: "updateRole",
+            message: "What is the new role for the employee?",
+            choices: results.map(roles => roles.title)
+          }
+        ]).then(function (answer) {
+          const roles = results.find(roles => roles.title === answer.updateRole)
+          connection.query("UPDATE employees SET ? WHERE first_name = " + "'" + employee + "'", {
+            role_id: "" + roles.id + "",
+          },
+          function (err) {
+            if (err) throw err;
+            startApp();
+          }
+        )
+        })
+      })
+    })
+  })
+}
