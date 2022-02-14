@@ -17,7 +17,8 @@ See how the employee tracker in this screencastify exapmle : https://watch.scree
 NPM install
 
 ## Usage
-The user can use this repo directly from the command line. The user will need to respond to the prompts given in the command line to view their options.
+The user can use this repo directly from the command line. The user will need to respond to the prompts given in the command line to view their options. 
+The repo uses the Inquirer package, MySQL2 package, and the console.table package in order to function.
 
 ## Contributions
 No other contributers on this repo.
